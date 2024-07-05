@@ -19,16 +19,24 @@ function Login() {
   const inputRef = useRef()
 
   useEffect(()=>{
-    console.log(inputRef.current)
     /* inputRef.current.addEventListener('input', () => {
       inputRef.current.validity.setPatternMismatch('No coinciden con el patrón')
     }) */
-   const inputUsername = document.querySelector('#username')
-   inputUsername.addEventListener('input', () => {
+   const inputUsername = inputRef.current
+
+   const handleInput = () => {
     if(inputUsername.validity.patternMismatch){
       inputUsername.setCustomValidity('El valor introducido no es válido. No se permiten caracteres especiales')
+    } else {
+      inputUsername.setCustomValidity('')
     }
-   })
+   } 
+
+   inputUsername.addEventListener('input', handleInput)
+
+   return () => inputUsername.removeEventListener('input', handleInput)
+
+   //return inputUsername.removeEventListener('input' )
   }, [])
 
   // Función para cambiár el estado tan pronto se cambia el valor del input username
@@ -116,7 +124,7 @@ function Login() {
                 Nombre de usuario
               </label>
               { /* Con el onChange podemos verficar los cambios en el input, para esto pasamos el evento a la función handleUsername  */ }
-              <input onChange={(e) => handleUsername(e)} type='text' name='username' pattern='/^[A-Za-z0-9]+$/' id='username' placeholder='aprendiz' className='input' value={username} required/>
+              <input onChange={(e) => handleUsername(e)} type='text' name='username' pattern='^[A-Za-z0-9]+$' ref={inputRef} id='username' placeholder='aprendiz' className='input' value={username} required/>
             </div> 
             <div className='group-input'>
               <label htmlFor='password' className='label'>Contraseña</label>
